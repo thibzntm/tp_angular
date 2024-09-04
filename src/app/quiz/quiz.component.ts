@@ -27,4 +27,9 @@ export class QuizComponent implements OnInit {
   goToResultPage() {
     this.router.navigate(['/result']);
   }
+
+  resetQuiz() {
+    this.quizService.resetQuiz();
+  }
+  
 }

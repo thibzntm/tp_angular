@@ -17,6 +17,7 @@ export class ResultComponent implements OnInit {
   ngOnInit(): void {
     this.quizService.checkAnswers();
     this.score = this.quizService.score;
+    this.quizService.quizContent = [];
   }
 
   goToHome() {

@@ -5,6 +5,7 @@ import { HttpClient } from "@angular/common/http";
   providedIn: 'root'
 })
 export class QuizService {
+  
   quizContent: any[] = [];
   playerAnswers: {questionId: number; answer: string}[] = [];
   score = 0;
@@ -38,24 +39,39 @@ export class QuizService {
     this.playerAnswers.push({questionId, answer});
   }
 
-  getQuizContent() {
-    this.http.get('http://localhost:3000/questions').subscribe((questions: any) => {
+  getQuizContent(categoryId?: number) {
+    
+    
+    const url = categoryId
+      ? `http://localhost:3000/questions?id_categorie=${categoryId}`
+      : 'http://localhost:3000/questions';
+  
+    this.http.get(url).subscribe((questions: any) => {
+      this.quizContent = []; // Réinitialise le contenu du quiz
       for (const question of questions) {
         this.http.get(`http://localhost:3000/answers?questionId=${question.id}`).subscribe((answers: any) => {
           this.quizContent.push({
-              id: question.id,
-              question: question.questionLabel,
-              answers
+            id: question.id,
+            question: question.questionLabel,
+            answers
           });
         });
       }
     });
   }
 
+  
+
   resetQuiz() {
     this.quizContent = [];
     this.playerAnswers = [];
     this.score = 0;
     this.isQuizFinished = false;
+    
   }
+
+  getCategories() {
+    return this.http.get('http://localhost:3000/categories');
+  }
+  
 }
